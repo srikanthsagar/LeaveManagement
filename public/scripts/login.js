@@ -18,7 +18,9 @@ $(function(){
          }
        });
      }
-
+     else {
+       alert("Id && password mandatory.");
+     }
   });
 
 });
