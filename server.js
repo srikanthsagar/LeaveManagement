@@ -2,10 +2,12 @@ var express = require("express");
 var app = express();
 var bodyParser = require('body-parser');
 var User = require("./models/user");
+var Leave = require("./models/leave");
 var express_session = require('express-session');
 var router = express.Router();
 var mongoose = require('mongoose');
-var session;
+var session, loggedUserDetails = {};
+
 
 mongoose.connect('mongodb://localhost/leavemanagement');
 
@@ -26,22 +28,27 @@ app.get("/", function(req, res){
 });
 
 app.get("/user", function(req, res){
-  session = req.session;
-  if(session.employeeId){
-    User.find({ employeeId : session.employeeId}, function(err, data){
-      if(err){
-          res.send(err);
-      }
-      else if(data.length){
-         res.render('user.ejs', {
-           name : data[0].name,
-           employeeId : data[0].employeeId,
-           isAdmin : data[0].employeeId
-         });
-      }
-    });
+  loggedUserDetails = JSON.parse(req.session.user);
+  if(loggedUserDetails.employeeId){
+    var promiseArray = [getLeaveRequests(loggedUserDetails.employeeId), getLeavesApplied(loggedUserDetails.employeeId)];
+    if(loggedUserDetails.isAdmin){
+       promiseArray.push(getAllUsers(loggedUserDetails.employeeId));
+    }
+    Promise.all(promiseArray).then(
+      function(values) {
+        res.render('user.ejs', {
+          allUsers : values[2],
+          userData : loggedUserDetails
+        });
+    },
+    function(err){
+      console.log(err);
+    }
+  );
   }
-
+  else{
+    console.log("no session");
+  }
 });
 
 app.use('/api', router);
@@ -71,25 +78,72 @@ router.route('/user').post(function(req, res){
       res.json({sts : 1, msg : "Successfully Saved"});
    });
 
+});
 
+router.route('/user').put(function(req, res){
+    console.log("test");
+    User.update({employeeId : req.body.employeeId}, {
+      '$set' :{
+        name : req.body.name,
+        role : req.body.role,
+        managerId : req.body.managerId,
+      }
+    },
+    function(err, data){
+      if (err)
+         return console.error(err);
+      res.json({sts : 1, msg : "Successfully Updated"});
+    }
+  );
+});
+
+
+router.route('/user').delete(function(req, res){
+   User.remove({employeeId : req.body.employeeId},
+   function(err, data){
+     if (err)
+        return console.error(err);
+     res.json({sts : 1, msg : "Successfully Deleted"});
+   });
+});
+
+router.route('/leave').post(function(req, res){
+
+   var leave = new Leave({
+     fromDate : req.body.fromDate,
+     toDate : req.body.toDate,
+     employeeId : req.body.employeeId,
+     reason : req.body.reason,
+     managerId : req.body.managerId
+   });
+   leave.save(function (err, data) {
+      if (err)
+         return console.error(err);
+      res.json({sts : 1, msg : "Successfully Saved"});
+   });
 });
 
 router.route('/login').post(function(req, res){
-   User.find({ employeeId : req.body.employeeId}, function(err, data){
-     if(err){
-         res.send(err);
+   findByEmployeeId(req.body.employeeId).then(
+     function(data){
+       if(data.length && data[0].password == req.body.password){
+           session = req.session;
+           session.user = JSON.stringify({
+             name : data[0].name,
+             employeeId : data[0].employeeId,
+             managerId :data[0].managerId,
+             isAdmin : data[0].isAdmin
+           });
+           res.json({sts: 1, msg : "login success"});
+       }
+       else {
+         res.json({sts: 0, msg : "No records found"});
+       }
+     },
+     function(err){
+       res.send(err);
      }
-     else if(data.length && data[0].password == req.body.password){
-         session = req.session;
-         session.employeeId = req.body.employeeId;
-         res.json({sts: 1, msg : "login success"});
-        //  res.render("user.ejs", {
-        //    name : data[0].name,
-        //    employeeId : data[0].employeeId
-        //  })
-
-     }
-   });
+   );
 });
 
 router.route('/logout').get(function(req, res){
@@ -103,3 +157,19 @@ router.route('/logout').get(function(req, res){
 });
 
 app.listen(8181);
+
+function getLeaveRequests(){
+   return Promise.resolve(true);
+}
+
+function getLeavesApplied(){
+  return Promise.resolve(true);
+}
+
+function getAllUsers(id){
+  return User.find( { employeeId : { $ne: id } }).exec();
+}
+
+function findByEmployeeId(id){
+  return User.find( { employeeId : id} ).exec();
+}

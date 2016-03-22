@@ -5,9 +5,10 @@
     <script src= "scripts/user.js"></script>
   </head>
   <body>
-    <h1><%= name %> DashBoard</h1>
-
-    <% include ./partials/createuser %>
+    <h1><%= userData.name %> DashBoard</h1>
+    <% if(allUsers) { %>
+    <% include ./partials/usercrud %>
+    <% } %>
     <% include ./partials/leaveapplication %>
     <% include ./partials/leaverequest %>
     <% include ./partials/leavestatus %>
