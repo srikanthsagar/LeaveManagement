@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src= "scripts/lib/jQuery.js"></script>
-    <script src= "scripts/login.js"></script>
-  </head>
-  <body>
+   <body>
     <h1>Employee Login</h1>
-    <form id="login-form">
+    <p><% if(locals.msg){ %><%= msg %><%}%></p>
+    <form id="login-form" action="/login" method="post">
       Id :
-      <input type = "string" name="employeeId"> <br>
+      <input type = "string" name="employeeId" required="true"> <br>
       Password :
-      <input type = "password" name="password"><br>
+      <input type = "password" name="password" required="true"><br>
       <input type = "submit" value="submit">
     </form>
   </body>

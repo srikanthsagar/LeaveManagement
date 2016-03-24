@@ -7,6 +7,7 @@ var UserSchema = new Schema({
     employeeId: { type : Number , unique : true, required : true, dropDups: true },
     role: String,
     managerId: String,
+    phone : String,
     isAdmin: { type : Boolean, default : false }
 });
 

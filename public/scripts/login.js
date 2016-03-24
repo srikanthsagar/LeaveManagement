@@ -6,7 +6,7 @@ $(function(){
      var password = $(this).find("input[name='password']").val();
      if(employeeId && password){
        $.ajax({
-         url : "/api/login",
+         url : "/login",
          type : "POST",
          data : {
            employeeId : employeeId,
@@ -14,7 +14,7 @@ $(function(){
          },
          success : function(resp){
             if(resp.sts)
-               window.open("/user", "_self");
+               window.open("/home", "_self");
          }
        });
      }

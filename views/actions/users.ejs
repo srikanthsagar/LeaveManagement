@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="scripts/lib/jQuery.js"></script>
+  <script src="scripts/user.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles/user.css">
+</head>
+
+<body>
+  <h2>Employee List</h2>
+  <p id="msg">
+    <% if(locals.msg){ %>
+      <%= msg %>
+        <%}%>
+  </p>
+  <table id="employee-table" border="1">
+    <tr>
+      <th>Name</th>
+      <th>EmployeeId</th>
+      <th>Password</th>
+      <th>ManagerId</th>
+      <th>Role</th>
+      <th>Phone</th>
+      <th>Action</th>
+    </tr>
+
+    <% allUsers.forEach(function(user) { %>
+      <tr>
+        <td data-name="name">
+          <a href="/user?employeeId=<%= user.employeeId %>"> <%= user.name %> </a>
+        </td>
+        <td data-name="employeeId">
+          <%= user.employeeId %>
+        </td>
+        <td data-name="password"></td>
+        <td data-name="managerId">
+          <%= user.managerId %>
+        </td>
+        <td data-name="role">
+          <%= user.role %>
+        </td>
+        <td data-name="phone">
+          <%= user.phone %>
+        </td>
+        <td> &nbsp <a href="/updateuser?employeeId=<%= user.employeeId %>">Edit</a> | <a class="delete-user" href="/deleteuser?employeeId=<%= user.employeeId %>">Remove</a> &nbsp </td>
+      </tr>
+      <% }); %>
+  </table>
+  <p id="total-employees" data-count="<%= total %>" data-page="<%= pageNo %>"> Total number of employees : <%= total %> </p>
+  <span>Pages : </span> <div id="pagination"></div>
+  <h3><a href="/home">Home</a></h3>
+</body>
+
+</html>

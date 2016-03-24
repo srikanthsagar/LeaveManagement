@@ -1,140 +1,54 @@
 $(function(){
 
-  $("#create-employee").click(function(){
-    var html = '<tr>'+
-    '<td contentEditable="true" data-name="name"><br></td><td contentEditable="true" data-name="employeeId"><br></td>'+
-    '<td contentEditable="true" data-name="password"></td>'+
-    '<td contentEditable="true" data-name="managerId"><br></td><td contentEditable="true" data-name="role"><br></td><td><br></td>'+
-    '<td><button id="save-employee">Save</button></td></tr>';
-    $("#create-employee-table").append(html);
-  });
-
-  $("#create-employee-table").on("click", "#save-employee", function(e){
-      var mandatory = ["name", "employeeId", "password"];
-      var data = getEmployeeRecord($(this), mandatory);
-      if(data){
-        console.log(data);
-        $.ajax({
-          url : "/api/user",
-          type : "POST",
-          data : data,
-          success : function(resp){
-             alert(resp.msg);
-          }
-        });
-      }
-      else{
-        alert("All fields are mandatory");
-      }
-  });
-
-  function getEmployeeRecord($this, mandatory){
-    var currRecord = $this.parents("tr");
-    var err = false, data = {};
-    currRecord.find("td").each(function(e){
-      if($(this).index() < 5){
-        if(!$(this).text() && (mandatory.indexOf($(this).data("name")) >= 0) ){
-          err = true;
-        }
-        else{
-          data[$(this).data("name")] = $(this).text();
-        }
-      }
-    });
-    if(err)
-       return false;
-    else {
-       return data;
-    }
-  }
-
-  $("#create-employee-table").on("click", ".edit-record", function(){
-    var currRecord = $(this).parents("tr");
-    var $this = $(this);
-    if($(this).text() == "Edit"){
-      currRecord.find("td[data-name='name']").attr("contentEditable", "true").focus();
-      currRecord.find("td[data-name='managerId']").attr("contentEditable", "true");
-      currRecord.find("td[data-name='role']").attr("contentEditable", "true");
-      $(this).text("Save");
-    }
-    else if($(this).text() == "Save"){
-      var mandatory = ["name"];
-      var data = getEmployeeRecord($(this), mandatory);
-      if(data){
-        $.ajax({
-          url : "/api/user",
-          type : "PUT",
-          data : data,
-          success : function(resp){
-             alert(resp.msg);
-             if(resp.sts){
-               currRecord.find("td[data-name='name']").attr("contentEditable", "false");
-               currRecord.find("td[data-name='managerId']").attr("contentEditable", "false");
-               currRecord.find("td[data-name='role']").attr("contentEditable", "false");
-               $this.text("Edit");
-             }
-          }
-        });
-      }
-      else{
-        alert(mandatory +" mandatory");
-      }
-    }
-
-  });
-
-  $("#create-employee-table").on("click", ".delete-record", function(){
-    var currRecord = $(this).parents("tr");
-      var del = confirm("Are you sure want to delete ? ");
-      var employeeId = currRecord.find("td[data-name='employeeId']").text();
-      if(del){
-          $.ajax({
-            url : "/api/user",
-            type : "DELETE",
-            data : {
-              employeeId : employeeId
-            },
-            success : function(resp){
-               alert(resp.msg);
-               if(resp.sts){
-                 currRecord.remove();
-               }
-            }
-          });
-      }
-  });
-
-
-  $("#leave-application-form").submit((e)=> {
-     e.preventDefault();
-     var err = false ;
-     var fd = new FormData();
-
-    var formData = $('form').serializeArray();
-    $.each(formData,function(key,input){
-          if(!input.value){
-            err = true;
-            alert("All fields mandatory");
-            return false;
-          }
-        fd.append(input.name,input.value);
-    });
-
-    fd.append("employeeId");
-    fd.append("managerId");
-
-     if(!err){
-       $.ajax({
-         url : "/api/leave",
-         type : "POST",
-         data : fd,
-         success : function(resp){
-            alert(resp.msg);
+ /* will get all users on select employeeId in updateuser page */
+ $("#update-employee-form").on("change", "select[name='employeeId']", function(e){
+    var id = $(this).val();
+    $.ajax({
+      url : "/api/user",
+      type : "get",
+      data : {
+        employeeId : id
+      },
+      success : function(resp){
+         $("#msg").text(resp.msg);
+         if(resp.sts){
+           var data = resp.data[0];
+           $("#update-employee-form").find("[name='name']").val(data.name);
+           $("#update-employee-form").find("[name='password']").val(data.password);
+           $("#update-employee-form").find("[name='managerId']").val(data.managerId);
+           $("#update-employee-form").find("[name='role']").val(data.role);
+           $("#update-employee-form").find("[name='phone']").val(data.phone);
          }
-       });
-     }
-  });
+      }
+    });
+ });
 
+$("#employee-table").on("click", ".delete-user", function(e){
+  e.preventDefault();
+  var del = confirm("Are you sure want to delete ?");
+  if(del){
+    window.open($(this).attr("href"), "_self");
+  }
+});
+
+makePagination();
+
+function makePagination(){
+  var i;
+  var path = window.location.pathname;
+  if(path != "/users")
+     return false;
+  var total = $("#total-employees").data("count");
+  var perPage = 10 ;
+  var pageNo = $("#total-employees").data("page");
+  var numOfPages = total / perPage ;
+  if(total%perPage > 0)
+    numOfPages++;
+
+  for(i=1; i <= numOfPages; i++){
+      $("#pagination").append('<a class="page-num '+(i==pageNo ? 'active' : '')+'" href="/users?pageNo='+i+'">'+i+'</a>');
+  }
+}
 
 
 });
