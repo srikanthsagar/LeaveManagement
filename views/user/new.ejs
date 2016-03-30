@@ -1,0 +1,33 @@
+
+<h1>Create Employee</h1>
+<p id="msg"><% if(locals.msg){ %><%= msg %><%}%></p>
+<form id="create_employee_form" action="/users/new" method="post">
+  Name :
+  <input type = "string" name="name" required="true"> <br>
+  Email :
+  <input type = "email" name="employeeEmail" required="true"> <br>
+  Password :
+  <input type = "password" name="password" required="true"><br>
+
+  Manager :
+  <% if(locals.allUsers) { %>
+    <select name="managerEmail">
+    <option value="">Select</option>
+    <% allUsers.forEach(function(user) {
+       if(user){ %>
+        <option value="<%= user %>" ><%= user %></option>
+     <% } }); %>
+     </select> <br>
+  <% } else { %>
+  <input type = "email" name="managerEmail"> <br>
+  <% } %>
+
+  Role :
+  <input type = "string" name="role"><br>
+  Phone :
+  <input type = "string" name="phone"><br>
+
+  <input type = "submit" value = "create" >
+</form>
+
+<h3><a href="/home">Home</a></h3>

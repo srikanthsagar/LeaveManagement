@@ -3,9 +3,9 @@
 <table id="create-employee-table" border="1">
   <tr>
     <th>Name</th>
-    <th>EmployeeId</th>
+    <th>employeeEmail</th>
     <th>Password</th>
-    <th>ManagerId</th>
+    <th>managerEmail</th>
     <th>Role</th>
     <th>Edit</th>
     <th>Delete</th>
@@ -13,9 +13,9 @@
   <% allUsers.forEach(function(user) { %>
        <tr>
          <td data-name="name"><%= user.name %></td>
-         <td data-name="employeeId"><%= user.employeeId %></td>
+         <td data-name="employeeEmail"><%= user.employeeEmail %></td>
          <td data-name="password"></td>
-         <td data-name="managerId"><%= user.managerId %></td>
+         <td data-name="managerEmail"><%= user.managerEmail %></td>
          <td data-name="role"><%= user.role %></td>
          <td><button class="edit-record">Edit</button></td>
          <td><button class="delete-record">Delete</button></td>

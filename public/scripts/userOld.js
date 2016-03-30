@@ -2,15 +2,15 @@ $(function(){
 
   $("#create-employee").click(function(){
     var html = '<tr>'+
-    '<td contentEditable="true" data-name="name"><br></td><td contentEditable="true" data-name="employeeId"><br></td>'+
+    '<td contentEditable="true" data-name="name"><br></td><td contentEditable="true" data-name="employeeEmail"><br></td>'+
     '<td contentEditable="true" data-name="password"></td>'+
-    '<td contentEditable="true" data-name="managerId"><br></td><td contentEditable="true" data-name="role"><br></td><td><br></td>'+
+    '<td contentEditable="true" data-name="managerEmail"><br></td><td contentEditable="true" data-name="role"><br></td><td><br></td>'+
     '<td><button id="save-employee">Save</button></td></tr>';
     $("#create-employee-table").append(html);
   });
 
   $("#create-employee-table").on("click", "#save-employee", function(e){
-      var mandatory = ["name", "employeeId", "password"];
+      var mandatory = ["name", "employeeEmail", "password"];
       var data = getEmployeeRecord($(this), mandatory);
       if(data){
         console.log(data);
@@ -53,7 +53,7 @@ $(function(){
     var $this = $(this);
     if($(this).text() == "Edit"){
       currRecord.find("td[data-name='name']").attr("contentEditable", "true").focus();
-      currRecord.find("td[data-name='managerId']").attr("contentEditable", "true");
+      currRecord.find("td[data-name='managerEmail']").attr("contentEditable", "true");
       currRecord.find("td[data-name='role']").attr("contentEditable", "true");
       $(this).text("Save");
     }
@@ -69,7 +69,7 @@ $(function(){
              alert(resp.msg);
              if(resp.sts){
                currRecord.find("td[data-name='name']").attr("contentEditable", "false");
-               currRecord.find("td[data-name='managerId']").attr("contentEditable", "false");
+               currRecord.find("td[data-name='managerEmail']").attr("contentEditable", "false");
                currRecord.find("td[data-name='role']").attr("contentEditable", "false");
                $this.text("Edit");
              }
@@ -86,13 +86,13 @@ $(function(){
   $("#create-employee-table").on("click", ".delete-record", function(){
     var currRecord = $(this).parents("tr");
       var del = confirm("Are you sure want to delete ? ");
-      var employeeId = currRecord.find("td[data-name='employeeId']").text();
+      var employeeEmail = currRecord.find("td[data-name='employeeEmail']").text();
       if(del){
           $.ajax({
             url : "/api/user",
             type : "DELETE",
             data : {
-              employeeId : employeeId
+              employeeEmail : employeeEmail
             },
             success : function(resp){
                alert(resp.msg);
@@ -120,8 +120,8 @@ $(function(){
         fd.append(input.name,input.value);
     });
 
-    fd.append("employeeId");
-    fd.append("managerId");
+    fd.append("employeeEmail");
+    fd.append("managerEmail");
 
      if(!err){
        $.ajax({

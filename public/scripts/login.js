@@ -2,14 +2,14 @@ $(function(){
 
   $("#login-form").submit((e)=> {
      e.preventDefault();
-     var employeeId = $(this).find("input[name='employeeId']").val();
+     var employeeEmail = $(this).find("input[name='employeeEmail']").val();
      var password = $(this).find("input[name='password']").val();
-     if(employeeId && password){
+     if(employeeEmail && password){
        $.ajax({
          url : "/login",
          type : "POST",
          data : {
-           employeeId : employeeId,
+           employeeEmail : employeeEmail,
            password : password
          },
          success : function(resp){

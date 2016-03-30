@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Update Employee</h1>
+    <p><% if(locals.msg){ %><%= msg %><%}%></p>
+    <form id="update-employee-form" action="/users/update" method="post">
+    <input type="string" name="_id" hidden  value="<%= userData._id %>">
+      Employee Email :
+      <input type="email" name="employeeEmail" required="true" value="<%= userData.employeeEmail %>"> <br>
+      Name :
+      <input type = "string" name="name" required="true" value = "<%= userData.name %>" > <br>
+      Password :
+      <input type = "password" name="password" required="true"  value = "<%= userData.password %>"><br>
+    
+      Manager Email :
+        <% if(locals.allUsers) { %>
+            <select name="managerEmail">
+            <option value="">Select</option>
+            <% allUsers.forEach(function(user) {
+            if(user){ %>
+                <option value="<%= user.employeeEmail %>" <%= (user.employeeEmail == userData.managerEmail ? "selected" : "") %>  ><%= user.employeeEmail %></option>
+            <% } }); %>
+            </select> <br>
+        <% } else { %>
+        <input type = "email" name="managerEmail" value = "<%= userData.managerEmail %>"> <br>
+        <% } %>
+        
+      Role :
+      <input type = "string" name="role" value = "<%= userData.role %>"><br>
+      Phone :
+      <input type = "string" name="phone" value = "<%= userData.phone %>"><br>
+
+      <input type = "submit" value = "Update" >
+    </form>
+
+    <h3><a href="/home">Home</a></h3>
+  </body>
+</html>

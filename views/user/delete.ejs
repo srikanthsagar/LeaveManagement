@@ -7,13 +7,13 @@
   <body>
     <h1>Delete Employee Record</h1>
     <p><% if(locals.msg){ %><%= msg %><%}%></p>
-    <form id="delete-employee-form" action="/deleteuser" method="delete">
+    <form id="delete-employee-form" action="/users/delete" method="delete">
 
-      EmployeeId :
-      <select name="employeeId">
+      employeeEmail :
+      <select name="employeeEmail">
       <option value="">Select</option>
       <% allUsers.forEach(function(user) { %>
-          <option value="<%= user.employeeId %>"><%= user.employeeId %></option>
+          <option value="<%= user.employeeEmail %>"><%= user.employeeEmail %></option>
        <% }); %>
        </select> <br>
 

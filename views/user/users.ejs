@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="scripts/lib/jQuery.js"></script>
+  <script src="scripts/user.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles/user.css">
+</head>
+
+<body>
+  <h2>Employee List</h2>
+  <h3 id="msg">
+    <% if(locals.msg){ %>
+      <%= msg %>
+        <%}%>
+  </h3>
+  <table id="employee-table" border="1">
+    <tr>
+      <th>Name</th>
+      <th>Employee Email</th>
+      <th>Password</th>
+      <th>Role</th>
+      <th>Phone</th>
+      <th>Manager Name</th>
+      <th>Manager Email</th>
+      <th>Action</th>
+    </tr>
+
+    <% allUsers.forEach(function(user) { %>
+      <tr>
+        <td data-name="name">
+          <a href="/users/<%= user._id %>">
+            <%= user.name %>
+          </a>
+        </td>
+        <td data-name="employeeEmail">
+          <%= user.employeeEmail %>
+        </td>
+        <td data-name="password"></td>
+        <td data-name="role">
+          <%= user.role %>
+        </td>
+        <td data-name="phone">
+          <%= user.phone %>
+        </td>
+        <td data-name="managerName">
+          <%= ( user.managerDetails[0] ? user.managerDetails[0].name : "") %>
+        </td>
+        <td data-name="managerEmail">
+          <%= user.managerEmail %>
+        </td>
+        <td> &nbsp <a href="/users/<%= user._id %>/update">Edit</a> | <a class="delete-user" href="/users/<%= user._id %>/delete">Remove</a> &nbsp </td>
+      </tr>
+      <% }); %>
+  </table>
+  <p id="total-employees" data-count="<%= total %>" data-page="<%=( locals.pageNo ? pageNo : 1 ) %>"> Total number of employees :
+    <%= total %>
+  </p>
+  <span>Pages : </span>
+  <div id="pagination"></div>
+  <h3><a href="/home">Home</a></h3>
+</body>
+
+</html>
