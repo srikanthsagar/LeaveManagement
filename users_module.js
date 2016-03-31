@@ -139,13 +139,15 @@ exports.getUserView = function(req, res){
 
 exports.getAllUsers = function(req, res) {
   var pageNo = req.query.pageNo || 1 ;
-  var promiseArray = [getUsers(pageNo,10), getUsersCount()];
+  var promiseArray = [getUsers(pageNo,10, req.query.sort, req.query.field), getUsersCount()];
   Promise.all(promiseArray).then(
     function(values){
       res.render('user/users', {
         allUsers: values[0],
         total : values[1],
         pageNo : pageNo,
+        sort : req.query.sort,
+        field : req.query.field,
         msg : req.query.optn ? (req.query.usr + " " + req.query.optn + " successfully") : ""     
       });
     },
@@ -158,19 +160,27 @@ exports.getAllUsers = function(req, res) {
   );
 };
 
-function getUsers(pageNo, perPage) {
-    if (pageNo && perPage)
-        return User.aggregate([
-            {
-                $lookup: { from: 'users', localField: 'managerEmail', foreignField: 'employeeEmail', as: 'managerDetails' }
-            }
-        ]).skip(pageNo > 0 ? ((pageNo - 1) * perPage) : 0).limit(perPage).exec();
+function getUsers(pageNo, perPage, sort, field) {
+    var sortCriterea = {};
+    if(field == "managerName")
+       sortCriterea["managerDetails.name"] = sort ? parseInt(sort) : undefined;
     else
+       sortCriterea[field] = sort ? parseInt(sort) : undefined;
+    if (pageNo && perPage){
         return User.aggregate([
             {
                 $lookup: { from: 'users', localField: 'managerEmail', foreignField: 'employeeEmail', as: 'managerDetails' }
             }
-        ]).exec(); 
+        ]).sort(sortCriterea).skip(pageNo > 0 ? ((pageNo - 1) * perPage) : 0).limit(perPage).exec();
+    }
+    else{
+        return User.aggregate([
+            {
+                $lookup: { from: 'users', localField: 'managerEmail', foreignField: 'employeeEmail', as: 'managerDetails' }
+            }
+        ]).sort(sortCriterea).exec();
+    }
+         
    
 //   if(pageNo && perPage)
 //     return User.find().skip(pageNo > 0 ? ((pageNo-1)*perPage) : 0).limit(perPage).exec();

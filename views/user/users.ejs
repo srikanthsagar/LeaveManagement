@@ -2,9 +2,9 @@
 <html>
 
 <head>
-  <script src="scripts/lib/jQuery.js"></script>
-  <script src="scripts/user.js"></script>
-  <link rel="stylesheet" type="text/css" href="styles/user.css">
+  <script src="/scripts/lib/jQuery.js"></script>
+  <script src="/scripts/user.js"></script>
+  <link rel="stylesheet" type="text/css" href="/styles/user.css">
 </head>
 
 <body>
@@ -16,44 +16,71 @@
   </h3>
   <table id="employee-table" border="1" data-users="<%= JSON.stringify(allUsers) %>">
     <tr>
-      <th data-name="name">Name <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>
-      <th data-name="employeeEmail">Employee Email <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>
-   <!--   <th data-name="password">Password <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>  -->
-      <th data-name="role">Role <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>
-      <th data-name="phone">Phone <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>
-      <th data-name="managerName">Manager Name <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>
-      <th data-name="managerEmail">Manager Email <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>
+      <th data-name="name">Name <a href="/users/?sort=1&field=name&pageNo=<%=( locals.pageNo ? pageNo : 1 ) %>" 
+      class="sort-up <%=( (locals.sort && locals.field) ? ((sort == 1 && field == 'name') ? 'active' : '') : '') %>"><img src="/images/up.png"></a> 
+      <a href="/users/?sort=-1&field=name&pageNo=<%=( locals.pageNo ? pageNo : 1 ) %>" 
+      class="sort-down <%=( (locals.sort && locals.field) ? ((sort == -1 && field == 'name') ? 'active' : '') : '') %>"><img src="/images/down.png"></a></span></th>
+      
+      <th data-name="employeeEmail">Employee Email <a href="/users/?sort=1&field=employeeEmail&pageNo=<%=( locals.pageNo ? pageNo : 1 ) %>" 
+      class="sort-up <%=( (locals.sort && locals.field) ? ((sort == 1 && field == 'employeeEmail') ? 'active' : '') : '') %>"><img src="/images/up.png"></a> 
+      <a href="/users/?sort=-1&field=employeeEmail&pageNo=<%=( locals.pageNo ? pageNo : 1 ) %>" 
+      class="sort-down <%=( (locals.sort && locals.field) ? ((sort == -1 && field == 'employeeEmail') ? 'active' : '') : '') %>"><img src="/images/down.png"></a></span></th>
+      
+   <!--   <th data-name="password">Password <a href="#" class="sort-up <%=( (locals.sort && locals.field) ? (sort == 1 && field == 'name' ? 'active' : '') : '') %>"><img src="/images/up.png"></a> <a href="#" class="sort-down <%=( (locals.sort && locals.field) ? (sort == 1 && field == 'name' ? 'active' : '') : '') %>"><img src="/images/down.png"></a></span></th>  -->
+      
+      <th data-name="role">Role <a href="/users/?sort=1&field=role&pageNo=<%=( locals.pageNo ? pageNo : 1 ) %>" 
+      class="sort-up <%=( (locals.sort && locals.field) ? ((sort == 1 && field == 'role') ? 'active' : '') : '') %>"><img src="/images/up.png"></a> 
+      <a href="/users/?sort=-1&field=role&pageNo=<%=( locals.pageNo ? pageNo : 1 ) %>" 
+      class="sort-down <%=( (locals.sort && locals.field) ? ((sort == -1 && field == 'role') ? 'active' : '') : '') %>"><img src="/images/down.png"></a></span></th>
+      
+      <th data-name="phone">Phone <a href="/users/?sort=1&field=phone&pageNo=<%=( locals.pageNo ? pageNo : 1 ) %>" 
+      class="sort-up <%=( (locals.sort && locals.field) ? ((sort == 1 && field == 'phone') ? 'active' : '') : '') %>"><img src="/images/up.png"></a>
+      <a href="/users/?sort=-1&field=phone&pageNo=<%=( locals.pageNo ? pageNo : 1 ) %>" 
+      class="sort-down <%=( (locals.sort && locals.field) ? ((sort == -1 && field == 'phone') ? 'active' : '') : '') %>"><img src="/images/down.png"></a></span></th>
+       
+      <th data-name="managerName">Manager Name <a href="/users/?sort=1&field=managerName&pageNo=<%=( locals.pageNo ? pageNo : 1 ) %>" 
+      class="sort-up <%=( (locals.sort && locals.field) ? ((sort == 1 && field == 'managerName') ? 'active' : '') : '') %>"><img src="/images/up.png"></a>
+      <a href="/users/?sort=-1&field=managerName&pageNo=<%=( locals.pageNo ? pageNo : 1 ) %>" 
+      class="sort-down <%=( (locals.sort && locals.field) ? ((sort == -1 && field == 'managerName') ? 'active' : '') : '') %>"><img src="/images/down.png"></a></span></th>
+       
+      <th data-name="managerEmail">Manager Email <a href="/users/?sort=1&field=managerEmail&pageNo=<%=( locals.pageNo ? pageNo : 1 ) %>" 
+      class="sort-up <%=( (locals.sort && locals.field) ? ((sort == 1 && field == 'managerEmail') ? 'active' : '') : '') %>"><img src="/images/up.png"></a> 
+      <a href="/users/?sort=-1&field=managerEmail&pageNo=<%=( locals.pageNo ? pageNo : 1 ) %>" 
+      class="sort-down <%=( (locals.sort && locals.field) ? ((sort == -1 && field == 'managerEmail') ? 'active' : '') : '') %>"><img src="/images/down.png"></a></span></th>
+      
       <th>Action</th>
     </tr>
 
     <% allUsers.forEach(function(user, i) { %>
       <tr>
-        <td data-name="name" data-val="<%= user.name + i %>">
+        <td data-name="name">
           <a href="/users/<%= user._id %>">
             <%= user.name %>
           </a>
         </td>
-        <td data-name="employeeEmail" data-val="<%= user.employeeEmail + i %>">
+        <td data-name="employeeEmail">
           <%= user.employeeEmail %>
         </td>
-     <!--   <td data-name="password" data-val="<%= user.password + i %>"></td> -->
-        <td data-name="role" data-val="<%= user.role + i %>">
+     <!--   <td data-name="password"></td> -->
+        <td data-name="role">
           <%= user.role %>
         </td>
-        <td data-name="phone" data-val="<%= user.phone + i %>">
+        <td data-name="phone">
           <%= user.phone %>
         </td>
-        <td data-name="managerName" data-val="<%= ( user.managerDetails[0] ? user.managerDetails[0].name : "") + i %>">
+        <td data-name="managerName">
           <%= ( user.managerDetails[0] ? user.managerDetails[0].name : "") %>
         </td>
-        <td data-name="managerEmail" data-val="<%= user.managerEmail + i %>">
+        <td data-name="managerEmail">
           <%= user.managerEmail %>
         </td>
         <td> &nbsp <a href="/users/<%= user._id %>/update">Edit</a> | <a class="delete-user" href="/users/<%= user._id %>/delete">Remove</a> &nbsp </td>
       </tr>
       <% }); %>
   </table>
-  <p id="total-employees" data-count="<%= total %>" data-page="<%=( locals.pageNo ? pageNo : 1 ) %>"> Total number of employees :
+  <p id="total-employees" data-count="<%= total %>" data-page="<%=( locals.pageNo ? pageNo : 1 ) %>" 
+  data-sort="<%=( locals.sort ? sort : '' ) %>" data-field="<%=( locals.field ? field : '' ) %>" 
+  > Total number of employees :
     <%= total %>
   </p>
   <span>Pages : </span>
