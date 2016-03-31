@@ -5,3 +5,25 @@
   font-weight: bold;
   font-size: 1.2em;
 }
+#employee-table th img{
+    height: 10px;
+}
+.hideThis {
+    display: none;
+}
+
+#employee-table th a.active > img {
+    height : 12px;   
+}
+#employee-table th a{
+    position: relative;
+}
+
+#employee-table th a:first-child{
+    top: -5px;
+    right : -6px;
+}
+#employee-table th a:nth-child(2){
+    bottom: -5px;
+    left: -8px;
+}

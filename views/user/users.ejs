@@ -14,39 +14,39 @@
       <%= msg %>
         <%}%>
   </h3>
-  <table id="employee-table" border="1">
+  <table id="employee-table" border="1" data-users="<%= JSON.stringify(allUsers) %>">
     <tr>
-      <th>Name</th>
-      <th>Employee Email</th>
-      <th>Password</th>
-      <th>Role</th>
-      <th>Phone</th>
-      <th>Manager Name</th>
-      <th>Manager Email</th>
+      <th data-name="name">Name <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>
+      <th data-name="employeeEmail">Employee Email <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>
+   <!--   <th data-name="password">Password <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>  -->
+      <th data-name="role">Role <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>
+      <th data-name="phone">Phone <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>
+      <th data-name="managerName">Manager Name <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>
+      <th data-name="managerEmail">Manager Email <a href="#" class="sort-up"><img src="images/up.png"></a> <a href="#" class="sort-down"><img src="images/down.png"></a></span></th>
       <th>Action</th>
     </tr>
 
-    <% allUsers.forEach(function(user) { %>
+    <% allUsers.forEach(function(user, i) { %>
       <tr>
-        <td data-name="name">
+        <td data-name="name" data-val="<%= user.name + i %>">
           <a href="/users/<%= user._id %>">
             <%= user.name %>
           </a>
         </td>
-        <td data-name="employeeEmail">
+        <td data-name="employeeEmail" data-val="<%= user.employeeEmail + i %>">
           <%= user.employeeEmail %>
         </td>
-        <td data-name="password"></td>
-        <td data-name="role">
+     <!--   <td data-name="password" data-val="<%= user.password + i %>"></td> -->
+        <td data-name="role" data-val="<%= user.role + i %>">
           <%= user.role %>
         </td>
-        <td data-name="phone">
+        <td data-name="phone" data-val="<%= user.phone + i %>">
           <%= user.phone %>
         </td>
-        <td data-name="managerName">
+        <td data-name="managerName" data-val="<%= ( user.managerDetails[0] ? user.managerDetails[0].name : "") + i %>">
           <%= ( user.managerDetails[0] ? user.managerDetails[0].name : "") %>
         </td>
-        <td data-name="managerEmail">
+        <td data-name="managerEmail" data-val="<%= user.managerEmail + i %>">
           <%= user.managerEmail %>
         </td>
         <td> &nbsp <a href="/users/<%= user._id %>/update">Edit</a> | <a class="delete-user" href="/users/<%= user._id %>/delete">Remove</a> &nbsp </td>
